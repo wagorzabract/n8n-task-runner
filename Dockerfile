@@ -1,15 +1,13 @@
-# 阶段1: 从 Debian 镜像获取 ffmpeg
-FROM debian:bookworm-slim AS ffmpeg-builder
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
+# 阶段1: 从专门提供静态 ffmpeg 的镜像中获取
+FROM mwader/static-ffmpeg:6.1.1 AS ffmpeg-source
 
 # 阶段2: 主镜像
 FROM n8nio/runners:2.1.1
 USER root
 
-# 从 builder 阶段复制 ffmpeg 及其依赖库
-COPY --from=ffmpeg-builder /usr/bin/ffmpeg /usr/bin/ffmpeg
-COPY --from=ffmpeg-builder /usr/bin/ffprobe /usr/bin/ffprobe
-COPY --from=ffmpeg-builder /usr/lib/ /usr/lib/
+# 只需要复制这一个文件即可，它没有外部依赖
+COPY --from=ffmpeg-source /ffmpeg /usr/local/bin/ffmpeg
+COPY --from=ffmpeg-source /ffprobe /usr/local/bin/ffprobe
 
 # 安装外部库
 RUN cd /opt/runners/task-runner-python && uv pip install numpy pandas requests
