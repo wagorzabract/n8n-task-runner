@@ -1,8 +1,8 @@
 FROM n8nio/runners:2.1.1
 USER root
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+# 安装系统依赖 (Alpine Linux)
+RUN apk add --no-cache ffmpeg
 
 # 安装外部库
 RUN cd /opt/runners/task-runner-python && uv pip install numpy pandas requests
