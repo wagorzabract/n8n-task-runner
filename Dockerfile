@@ -9,23 +9,20 @@ USER root
 COPY --from=ffmpeg-source /ffmpeg /usr/local/bin/ffmpeg
 COPY --from=ffmpeg-source /ffprobe /usr/local/bin/ffprobe
 
-# 2. 安装系统依赖：fontconfig (用于管理字体)
-# 注意：n8nio/runners 是基于 Alpine 的，使用 apk
-RUN apk add --no-cache fontconfig
+# 2. 直接在 runner 用户目录下创建字体目录并存放
+# 既然没有 apk，我们就跳过系统安装，直接把文件放好
+RUN mkdir -p /home/runner/fonts
+COPY fonts/* /home/runner/fonts/
 
-# 3. 安装字体到系统目录
-# 创建字体目录并复制本地 fonts 文件夹中的所有字体
-RUN mkdir -p /usr/share/fonts/custom
-COPY fonts/* /usr/share/fonts/custom/
-
-# 刷新系统字体缓存
-RUN fc-cache -fv
-
-# 4. 安装 Python 库 (包含 Pillow, numpy 等)
+# 3. 安装 Python 库 (包含 Pillow, numpy 等)
+# uv 应该是镜像自带的工具，之前的步骤证明它可以运行
 RUN cd /opt/runners/task-runner-python && uv pip install numpy pandas requests Pillow
 
-# 5. 复制配置文件
+# 4. 复制配置文件
 COPY n8n-task-runners.json /etc/n8n-task-runners.json
+
+# 5. 确保权限正确
+RUN chown -R runner:runner /home/runner/fonts
 
 # 切换回 runner 用户
 USER runner
