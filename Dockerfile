@@ -2,7 +2,7 @@
 FROM mwader/static-ffmpeg:6.1.1 AS ffmpeg-source
 
 # 阶段2: 主镜像
-FROM n8nio/runners:2.1.1
+FROM n8nio/runners:2.1.4
 USER root
 
 # 1. 复制 ffmpeg 静态二进制文件
