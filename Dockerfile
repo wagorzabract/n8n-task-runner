@@ -16,7 +16,7 @@ COPY fonts/* /home/runner/fonts/
 
 # 3. 安装 Python 库 (包含 Pillow, numpy 等)
 # uv 应该是镜像自带的工具，之前的步骤证明它可以运行
-RUN cd /opt/runners/task-runner-python && uv pip install numpy pandas requests Pillow
+RUN cd /opt/runners/task-runner-python && uv pip install numpy pandas requests Pillow openpyxl xlsxwriter xlrd
 
 # 4. 复制配置文件
 COPY n8n-task-runners.json /etc/n8n-task-runners.json

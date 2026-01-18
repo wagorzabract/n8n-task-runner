@@ -14,12 +14,16 @@ services:
       - n8n_data:/home/node/.n8n
     # etc.
 
-  task-runners:
-    image: n8nio/runners:2.3.6
-    container_name: n8n-runners
+  task-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: n8n-runner
     environment:
       - N8N_RUNNERS_TASK_BROKER_URI=http://n8n-main:5679
       - N8N_RUNNERS_AUTH_TOKEN=your-secret-here
+      - N8N_RUNNERS_STDLIB_ALLOW=*
+      - N8N_RUNNERS_EXTERNAL_ALLOW=*
       # etc.
     depends_on:
       - n8n
