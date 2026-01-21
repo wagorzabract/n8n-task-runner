@@ -1,15 +1,7 @@
-# 阶段1: 获取静态 ffmpeg
-FROM mwader/static-ffmpeg:6.1.1 AS ffmpeg-source
-# 阶段2: 主镜像
-FROM n8nio/runners:2.5.0
+FROM registry.cn-hangzhou.aliyuncs.com/ty_images/runners:2.3.6
 USER root
 
-
-# 1. 复制 ffmpeg 静态二进制文件
-COPY --from=ffmpeg-source /ffmpeg /usr/local/bin/ffmpeg
-COPY --from=ffmpeg-source /ffprobe /usr/local/bin/ffprobe
-
-# 2. 直接在 runner 用户目录下创建字体目录并存放
+# 1. 直接在 runner 用户目录下创建字体目录并存放
 # 既然没有 apk，我们就跳过系统安装，直接把文件放好
 RUN mkdir -p /home/runner/fonts
 COPY fonts/* /home/runner/fonts/

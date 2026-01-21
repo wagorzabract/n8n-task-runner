@@ -1,6 +1,6 @@
 services:
   n8n:
-    image: blowsnow/n8n-chinese:2.5.0
+    image: registry.cn-hangzhou.aliyuncs.com/ty_images/n8n-chinese:2.3.6
     container_name: n8n-main
     environment:
       - N8N_RUNNERS_ENABLED=true
@@ -10,7 +10,7 @@ services:
       - N8N_NATIVE_PYTHON_RUNNER=true
       - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
       - N8N_SECURE_COOKIE=false
-      # - WEBHOOK_URL=https://n8n.example.com/
+      - WEBHOOK_URL=https://n8n.example.com/   # webhook的地址处理
     ports:
       - "5678:5678"
     volumes:
